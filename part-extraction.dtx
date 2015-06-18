@@ -63,7 +63,7 @@ LaTeX/LuaLaTex class to extract parts from a full ensemble score.
 % \providecommand*{\url}{\texttt}
 % \GetFileInfo{part-extraction.dtx}
 % \title{The \textsf{part-extraction} package}
-% \author{<+author+> \\ \url{<+email+>}}
+% \author{Josef Friedrich \\ \url{josef@friedrich.rocks}}
 % \date{\fileversion~from \filedate}
 %
 % \maketitle
@@ -210,18 +210,26 @@ LaTeX/LuaLaTex class to extract parts from a full ensemble score.
 % \fi
 %    \begin{macrocode}
 require('lfs')
-
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 local part = {}
 part.systems = {}
-
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 function part.set_path(path)
   part.path = path
 end
-
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 function part.set_extension(extension)
   part.extension = extension
 end
-
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 function part.scandir()
   if part.extension == nil then
     part.extension = 'png'
@@ -233,17 +241,23 @@ function part.scandir()
     end
   end
 end
-
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 function part.make_system(filename)
   tex.print('\\part@system{' .. part.path .. filename .. '}')
 end
-
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 function part.print_all_systems()
   for key, filename in pairs(part.systems) do
     part.make_system(filename)
   end
 end
-
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 function part.print_next_system()
   if not part.counter then
     part.counter = 1
@@ -253,7 +267,9 @@ function part.print_next_system()
 
   part.counter = part.counter + 1
 end
-
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 return part
 %    \end{macrocode}
 % \iffalse
