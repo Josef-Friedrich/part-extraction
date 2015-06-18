@@ -18,12 +18,7 @@
 \LoadClass{article}
 
 \RequirePackage{graphicx}
-\RequirePackage[
-  margin=1cm,
-  %includefoot,
-  %foot=0.5cm,
-  %showframe,
-]{geometry}
+\RequirePackage[margin=1cm]{geometry}
 
 \pagenumbering{gobble}
 
