@@ -1,5 +1,6 @@
 *.DS_Store
 *.aux
+*.cls
 *.fdb_latexmk
 *.glo
 *.gls

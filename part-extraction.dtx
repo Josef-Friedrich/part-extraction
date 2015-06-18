@@ -22,16 +22,7 @@
 % \iffalse
 %<*driver>
 \ProvidesFile{part-extraction.dtx}
-%</driver>
-%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
-%<package>\ProvidesPackage{part-extraction}
-%<*package>
-    [2015/06/19 Class to extract parts from a full ensemble score.]
-%</package>
-%
-%<*driver>
 \documentclass{ltxdoc}
-\usepackage{part-extraction}[<+date+>]
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
@@ -43,7 +34,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{59}
+% \CheckSum{0}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -187,18 +178,15 @@
 %
 %
 % \begin{macro}{\piece}
-%%
-% \piece{Gott ist da}
-%%
 %    \begin{macrocode}
-\newcommand{\piece}[1]{\def\das@piece{#1}}
+\newcommand{\piece}[1]{\def\the@piece{#1}}
 %    \end{macrocode}
 % \end{macro}
 %
 %
 % \begin{macro}{\composer}
 %    \begin{macrocode}
-\newcommand{\composer}[1]{\def\der@composer{#1}}
+\newcommand{\composer}[1]{\def\the@composer{#1}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -207,15 +195,67 @@
   \directlua{part.scandir()}%
   {%
   \large%
-  \das@piece\
-  (\der@composer)%
+  \the@piece\
+  (\the@composer)%
   }%
   \makeatletter
-}%    \end{macrocode}
-
+}
+%    \end{macrocode}
 %
 % \iffalse
 %</package>
+%<*lua>
+% \fi
+%    \begin{macrocode}
+require('lfs')
+
+local part = {}
+part.systems = {}
+
+function part.set_path(path)
+  part.path = path
+end
+
+function part.set_extension(extension)
+  part.extension = extension
+end
+
+function part.scandir()
+  if part.extension == nil then
+    part.extension = 'png'
+  end
+
+  for filename in lfs.dir(part.path) do
+    if filename:match('%.' .. part.extension .. '$') then
+      table.insert(part.systems, filename)
+    end
+  end
+end
+
+function part.make_system(filename)
+  tex.print('\\part@system{' .. part.path .. filename .. '}')
+end
+
+function part.print_all_systems()
+  for key, filename in pairs(part.systems) do
+    part.make_system(filename)
+  end
+end
+
+function part.print_next_system()
+  if not part.counter then
+    part.counter = 1
+  end
+
+  part.make_system(part.systems[part.counter])
+
+  part.counter = part.counter + 1
+end
+
+return part
+%    \end{macrocode}
+% \iffalse
+%</lua>
 % \fi
 %
 % \Finale
