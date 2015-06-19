@@ -159,7 +159,28 @@ LaTeX/LuaLaTex class to extract parts from a full ensemble score.
   \directlua{
     part.print_next_systems('#1')
   }%
-  \vfill
+}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\partsystemnumber}
+%    \begin{macrocode}
+\newcommand{\partsystemnumber}[1]{%
+  \directlua{
+    part.print_system_by_number('#1')
+  }%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\partsystemcount}
+%    \begin{macrocode}
+\newcommand{\partsystemcount}{%
+  \directlua{
+    part.print_system_count()
+  }%
 }
 %    \end{macrocode}
 % \end{macro}
@@ -259,8 +280,8 @@ end
 %
 %    \begin{macrocode}
 function part.print_next_systems(count)
-  if not part.counter then
-    part.counter = 1
+  if not part.number then
+    part.number = 1
   end
 
   if not count then
@@ -270,12 +291,26 @@ function part.print_next_systems(count)
   end
 
   local tmp
-  for counter = part.counter, part.counter + count do
-    part.make_system(part.systems[counter])
-    tmp = counter
+  for number = part.number, part.number + count do
+    part.make_system(part.systems[number])
+    tmp = number
   end
 
-  part.counter = tmp + 1
+  part.number = tmp + 1
+end
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+function part.print_system_by_number(number)
+  part.make_system(part.systems[tonumber(number)])
+end
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+function part.print_system_count()
+  local count = 0
+  for _ in pairs(part.systems) do count = count + 1 end
+  tex.print(count)
 end
 %    \end{macrocode}
 %
