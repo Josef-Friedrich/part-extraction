@@ -1,14 +1,26 @@
+jobname = part-extraction
+texmfhome = $(HOME)/texmf
+projectpath = $(texmfhome)/tex/lualatex/$(jobname)
+
 all:
-	luatex part-extraction.ins
-	lualatex part-extraction.dtx
-	makeindex -s gglo.ist -o part-extraction.gls part-extraction.glo
-	makeindex -s gind.ist -o part-extraction.ind part-extraction.idx
-	lualatex part-extraction.dtx
+	install
+	doc
+
+install:
+	luatex $(jobname).ins
+	mkdir -p $(projectpath)
+	cp -f $(jobname).cls $(projectpath)
+
+doc:	
+	lualatex $(jobname).dtx
+	makeindex -s gglo.ist -o $(jobname).gls $(jobname).glo
+	makeindex -s gind.ist -o $(jobname).ind $(jobname).idx
+	lualatex $(jobname).dtx
+	mkdir -p $(texmfhome)/docs
+	cp -f $(jobname).pdf $(texmfhome)/docs
 
 test:
 	lualatex tests/example.tex
 
 clean:
 	./.githook_pre-commit
-
-.PHONY: all test clean
