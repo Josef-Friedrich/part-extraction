@@ -10,6 +10,7 @@ install:
 	luatex $(jobname).ins
 	mkdir -p $(projectpath)
 	cp -f $(jobname).cls $(projectpath)
+	cp -f $(jobname).lua $(projectpath)
 
 doc:	
 	lualatex $(jobname).dtx
