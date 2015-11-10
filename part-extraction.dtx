@@ -257,6 +257,10 @@ function part.scandir()
     part.extension = 'png'
   end
 
+  if part.path == nil then
+    part.path = './'
+  end
+
   for filename in lfs.dir(part.path) do
     if filename:match('%.' .. part.extension .. '$') then
       table.insert(part.systems, filename)
