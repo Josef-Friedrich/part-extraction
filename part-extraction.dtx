@@ -130,6 +130,7 @@ used as an example.
 \setlength{\parindent}{0cm}
 %    \end{macrocode}
 %
+% We use |PE| as abbreviation for \emph{part extraction}.
 % \begin{macro}{\part@system}
 %    \begin{macrocode}
 \newcommand{\part@system}[1]{%
@@ -146,9 +147,9 @@ used as an example.
 % \end{macro}
 %
 %
-% \begin{macro}{\partallsystems}
+% \begin{macro}{\PE@all@systems}
 %    \begin{macrocode}
-\newcommand{\partallsystems}{%
+\newcommand{\PE@all@systems}{%
   \directlua{
     part.print_all_systems()
   }%
@@ -158,9 +159,9 @@ used as an example.
 % \end{macro}
 %
 %
-% \begin{macro}{\partsystem}
+% \begin{macro}{\PE@system}
 %    \begin{macrocode}
-\newcommand{\partsystem}[1][]{%
+\newcommand{\PE@system}[1][1]{%
   \directlua{
     part.print_next_systems('#1')
   }%
@@ -229,6 +230,16 @@ used as an example.
   \makeatletter
 }
 %    \end{macrocode}
+%
+% \begin{environment}{partextraction}
+%    \begin{macrocode}
+\newenvironment{partextraction}[1][]{%
+  %\kvsetkeys{PE}{#1}%
+  \let\allsystems\PE@all@systems%
+  \let\system\PE@system%
+}{}
+%    \end{macrocode}
+% \end{environment}
 %
 % \iffalse
 %</package>
