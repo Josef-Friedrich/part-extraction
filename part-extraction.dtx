@@ -115,22 +115,37 @@ used as an example.
 \directlua{
   part = require('part-extraction')
 }
-\newif\ifseparator
-\separatorfalse
-\DeclareOption{separator}{\separatortrue}
-\DeclareOption*{%
-  \PassOptionsToClass{
-\CurrentOption}{article}%
-}
-\ProcessOptions\relax
+% \newif\ifseparator
+% \separatorfalse
+% \DeclareOption{separator}{\separatortrue}
+% \DeclareOption*{%
+%   \PassOptionsToClass{
+% \CurrentOption}{article}%
+% }
+% \ProcessOptions\relax
 
 \RequirePackage{graphicx}
 \RequirePackage[margin=1cm]{geometry}
+\RequirePackage{kvoptions}
 \pagenumbering{gobble}
 \setlength{\parindent}{0cm}
 %    \end{macrocode}
-%
+
+
 % We use |PE| as abbreviation for \emph{part extraction}.
+%    \begin{macrocode}
+\SetupKeyvalOptions{
+  family=PE,
+  prefix=PE@
+}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%\DeclareStringOption{path}
+\define@key{PE}{path}{\directlua{part.set_path('#1')}}
+\ProcessKeyvalOptions*
+%    \end{macrocode}
+%
 % \begin{macro}{\part@system}
 %    \begin{macrocode}
 \newcommand{\part@system}[1]{%
@@ -234,7 +249,7 @@ used as an example.
 % \begin{environment}{partextraction}
 %    \begin{macrocode}
 \newenvironment{partextraction}[1][]{%
-  %\kvsetkeys{PE}{#1}%
+  \kvsetkeys{PE}{#1}%
   \let\allsystems\PE@all@systems%
   \let\system\PE@system%
 }{}
