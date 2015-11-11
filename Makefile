@@ -7,10 +7,10 @@ all: install doc
 install:
 	luatex $(jobname).ins
 	mkdir -p $(projectpath)
-	cp -f $(jobname).cls $(projectpath)
+	cp -f $(jobname).sty $(projectpath)
 	cp -f $(jobname).lua $(projectpath)
 
-doc:	
+doc:
 	lualatex $(jobname).dtx
 	makeindex -s gglo.ist -o $(jobname).gls $(jobname).glo
 	makeindex -s gind.ist -o $(jobname).ind $(jobname).idx
