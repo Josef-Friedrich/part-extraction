@@ -10,6 +10,10 @@ install:
 	cp -f $(jobname).sty $(projectpath)
 	cp -f $(jobname).lua $(projectpath)
 
+uninstall:
+	rm -rf $(projectpath)
+	rm -f $(texmfhome)/doc/$(jobname).pdf
+
 doc:
 	lualatex $(jobname).dtx
 	makeindex -s gglo.ist -o $(jobname).gls $(jobname).glo
