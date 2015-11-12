@@ -115,8 +115,8 @@ used as an example.
 \directlua{
   part = require('part-extraction')
 }
-% \newif\ifseparator
-% \separatorfalse
+\newif\ifseparator
+\separatorfalse
 % \DeclareOption{separator}{\separatortrue}
 % \DeclareOption*{%
 %   \PassOptionsToClass{
@@ -124,6 +124,7 @@ used as an example.
 % }
 % \ProcessOptions\relax
 
+\RequirePackage[multidot,encoding,filenameencoding=utf8,extendedchars]{grffile}
 \RequirePackage{graphicx}
 \RequirePackage[margin=1cm]{geometry}
 \RequirePackage{kvoptions}
@@ -141,15 +142,18 @@ used as an example.
 %    \end{macrocode}
 %
 %    \begin{macrocode}
-%\DeclareStringOption{path}
 \define@key{PE}{path}{\directlua{part.set_path('#1')}}
+%    \end{macrocode}
+
+%    \begin{macrocode}
+\define@key{PE}{extension}{\directlua{part.set_extension('#1')}}
 \ProcessKeyvalOptions*
 %    \end{macrocode}
 %
 % \begin{macro}{\part@system}
 %    \begin{macrocode}
 \newcommand{\part@system}[1]{%
-  \includegraphics[width=\linewidth]{#1}%
+  \includegraphics[width=\linewidth]{{#1}}%
   \ifseparator%
     \par%
     \includegraphics{separator}%
@@ -165,9 +169,11 @@ used as an example.
 % \begin{macro}{\PE@all@systems}
 %    \begin{macrocode}
 \newcommand{\PE@all@systems}{%
+  \makeatletter
   \directlua{
     part.print_all_systems()
   }%
+  \makeatother
   \vfill
 }
 %    \end{macrocode}
@@ -234,22 +240,11 @@ used as an example.
 %    \end{macrocode}
 % \end{macro}
 %
-%    \begin{macrocode}
-\AtBeginDocument{%
-  \directlua{part.scandir()}%
-  {%
-  \large%
-  \the@piece\
-  (\the@composer)%
-  }%
-  \makeatletter
-}
-%    \end{macrocode}
-%
 % \begin{environment}{partextraction}
 %    \begin{macrocode}
 \newenvironment{partextraction}[1][]{%
   \kvsetkeys{PE}{#1}%
+  \directlua{part.scandir()}%
   \let\allsystems\PE@all@systems%
   \let\system\PE@system%
 }{}
@@ -283,6 +278,7 @@ end
 %
 %    \begin{macrocode}
 function part.scandir()
+
   if part.extension == nil then
     part.extension = 'png'
   end

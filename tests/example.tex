@@ -1,20 +1,19 @@
 %!TEX program = lualatex
 \documentclass{article}
-\usepackage[path={../graphics/systems/}]{part-extraction}
+\usepackage{part-extraction}
 
-\piece{Gott ist da}
-\composer{Joseph Haydn}
+%\piece{Gott ist da}
+%\composer{Joseph Haydn}
 
 %\partsetpath{../graphics/systems/}
 
 \begin{document}
 
-\begin{partextraction}
-\system
-
-lol
+\begin{partextraction}[path = {../graphics/systems/}, extension = png,]
+%\system
 
 \allsystems
+
 \end{partextraction}
 
 \end{document}
