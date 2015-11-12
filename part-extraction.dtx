@@ -23,13 +23,149 @@
 %<*driver>
 \ProvidesFile{part-extraction.dtx}
 \documentclass{ltxdoc}
+\usepackage[
+  path = {./graphics/systems/},
+  extension = png,
+]{part-extraction}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
 \begin{document}
-  \DocInput{part-extraction.dtx}
-  \PrintChanges
-  \PrintIndex
+
+\providecommand*{\url}{\texttt}
+\GetFileInfo{part-extraction.dtx}
+\title{The \textsf{part-extraction} package}
+\author{Josef Friedrich \\ \url{josef@friedrich.rocks}}
+\date{\fileversion~from \filedate}
+
+\maketitle
+
+\tableofcontents{}
+
+\section{Introduction}
+
+\section{Usage}
+
+\DescribeMacro{\allsystems}
+
+\begin{verbatim}
+\begin{partextraction}
+\allsystems
+\end{partextraction}
+\end{verbatim}
+
+\begin{partextraction}[title = lol]
+\system[3]
+
+\dots
+\end{partextraction}
+
+%-----------------------------------------------------------------------
+% \system
+%-----------------------------------------------------------------------
+
+\DescribeMacro{\system}
+ 
+\begin{verbatim}
+\begin{partextraction}
+\system[2]
+\end{partextraction}
+\end{verbatim}
+
+\begin{partextraction}
+\system[2]
+\end{partextraction}
+
+%-----------------------------------------------------------------------
+% \systemN
+%-----------------------------------------------------------------------
+
+\DescribeMacro{\systemN}
+
+\begin{verbatim}
+\begin{partextraction}
+System No. 5\\
+\systemN{5}
+
+System No. 1\\
+\systemN{1}
+\end{partextraction}
+\end{verbatim}
+
+\begin{partextraction}
+System No. 5\\
+\systemN{5}
+
+System No. 1\\
+\systemN{1}
+\end{partextraction}
+
+\section{Options}
+
+\subsection{path}
+
+For relative paths use this pattern: |./../some/path/|.
+
+\subsection{title}
+
+\begin{verbatim}
+\begin{partextraction}[title = {A title}]
+\system
+\end{partextraction}
+\end{verbatim}
+
+\begin{partextraction}[title = {A title}]
+\system
+\end{partextraction}
+
+\subsection{subtitle}
+
+\begin{verbatim}
+\begin{partextraction}[subtitle = {A subtitle}]
+\system
+\end{partextraction}
+\end{verbatim}
+
+\begin{partextraction}[subtitle = {A subtitle}]
+\system
+\end{partextraction}
+
+\subsection{composer}
+
+\begin{verbatim}
+\begin{partextraction}[composer = {A composer}]
+\system
+\end{partextraction}
+\end{verbatim}
+
+\begin{partextraction}[composer = {A composer}]
+\system
+\end{partextraction}
+
+\subsection{All meta informations}
+
+\begin{verbatim}
+\begin{partextraction}[
+  title = {A title},
+  subtitle = {A subtitle},
+  composer = {A composer}
+]
+\system
+\end{partextraction}
+\end{verbatim}
+
+\begin{partextraction}[
+  title = {A title},
+  subtitle = {A subtitle},
+  composer = {A composer}
+]
+\system
+\end{partextraction}
+
+
+\DocInput{part-extraction.dtx}
+\PrintChanges
+\PrintIndex
 \end{document}
 %</driver>
 %<*readme>
@@ -64,41 +200,6 @@ used as an example.
 % \changes{<+version+>}{<+date+>}{Converted to DTX file}
 %
 % \DoNotIndex{\newcommand,\newenvironment}
-%
-% \providecommand*{\url}{\texttt}
-% \GetFileInfo{part-extraction.dtx}
-% \title{The \textsf{part-extraction} package}
-% \author{Josef Friedrich \\ \url{josef@friedrich.rocks}}
-% \date{\fileversion~from \filedate}
-%
-% \maketitle
-%
-% \section{Introduction}
-%
-% Put text here.
-%
-% \section{Usage}
-%
-% Put text here.
-%
-%
-% \DescribeMacro{\partallsystems}
-%
-%
-% \DescribeMacro{\partsystem}
-%
-%
-% \DescribeMacro{\partsetpath}
-%
-%
-% \DescribeMacro{\partsetextension}
-%
-%
-% \DescribeMacro{\piece}
-%
-%
-% \DescribeMacro{\composer}
-%
 %
 % \StopEventually{}
 %
@@ -140,9 +241,24 @@ used as an example.
 %    \begin{macrocode}
 \define@key{PE}{path}{\directlua{part.set_path('#1')}}
 %    \end{macrocode}
-
+%
 %    \begin{macrocode}
 \define@key{PE}{extension}{\directlua{part.set_extension('#1')}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\define@key{PE}{title}{\def\PE@title{#1}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\define@key{PE}{subtitle}{\def\PE@subtitle{#1}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\define@key{PE}{composer}{\def\PE@composer{#1}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 \ProcessKeyvalOptions*
 %    \end{macrocode}
 %
@@ -155,8 +271,8 @@ used as an example.
     \includegraphics{separator}%
   \else%
   \fi%
-    \par%
-    \vfil%
+  \par%
+  \vfil%
 }
 %    \end{macrocode}
 % \end{macro}
@@ -179,60 +295,36 @@ used as an example.
 % \begin{macro}{\PE@system}
 %    \begin{macrocode}
 \newcommand{\PE@system}[1][1]{%
+  \makeatletter
   \directlua{
     part.print_next_systems('#1')
   }%
+  \makeatother
 }
 %    \end{macrocode}
 % \end{macro}
 %
 %
-% \begin{macro}{\partsystemnumber}
+% \begin{macro}{\PE@system@by@number}
 %    \begin{macrocode}
-\newcommand{\partsystemnumber}[1]{%
+\newcommand{\PE@system@by@number}[1]{%
+  \makeatletter
   \directlua{
     part.print_system_by_number('#1')
   }%
+  \makeatother
 }
 %    \end{macrocode}
 % \end{macro}
 %
 %
-% \begin{macro}{\partsystemcount}
+% \begin{macro}{\PE@system@count}
 %    \begin{macrocode}
-\newcommand{\partsystemcount}{%
+\newcommand{\PE@system@count}{%
   \directlua{
     part.print_system_count()
   }%
 }
-%    \end{macrocode}
-% \end{macro}
-%
-%
-% \begin{macro}{\partsetpath}
-%    \begin{macrocode}
-\newcommand{\partsetpath}[1]{\directlua{part.set_path('#1')}}
-%    \end{macrocode}
-% \end{macro}
-%
-%
-% \begin{macro}{\partsetextension}
-%    \begin{macrocode}
-\newcommand{\partsetextension}[1]{\directlua{part.set_extension('#1')}}
-%    \end{macrocode}
-% \end{macro}
-%
-%
-% \begin{macro}{\piece}
-%    \begin{macrocode}
-\newcommand{\piece}[1]{\def\the@piece{#1}}
-%    \end{macrocode}
-% \end{macro}
-%
-%
-% \begin{macro}{\composer}
-%    \begin{macrocode}
-\newcommand{\composer}[1]{\def\the@composer{#1}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -243,8 +335,15 @@ used as an example.
   \directlua{part.scandir()}%
   \let\allsystems\PE@all@systems%
   \let\system\PE@system%
+  \let\countS\PE@system@count%
+  \let\systemN\PE@system@by@number%
+
+  \ifx\PE@title\undefined\else \centerline{\Large{\bfseries{}\PE@title}} \fi
+  \ifx\PE@subtitle\undefined\else \centerline{\large{\PE@subtitle}} \fi
+  \ifx\PE@composer\undefined\else \par\raggedleft\textit{\PE@composer}\par \fi
 }{}
 %    \end{macrocode}
+%
 % \end{environment}
 %
 % \iffalse
