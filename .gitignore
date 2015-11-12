@@ -13,3 +13,5 @@
 *.sty
 *.synctex.gz
 *.toc
+*.dvi
+*.fls

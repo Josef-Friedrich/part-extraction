@@ -118,21 +118,17 @@ used as an example.
 \newif\ifseparator
 \separatorfalse
 % \DeclareOption{separator}{\separatortrue}
-% \DeclareOption*{%
-%   \PassOptionsToClass{
-% \CurrentOption}{article}%
-% }
-% \ProcessOptions\relax
-
-\RequirePackage[multidot,encoding,filenameencoding=utf8,extendedchars]{grffile}
-\RequirePackage{graphicx}
-\RequirePackage[margin=1cm]{geometry}
-\RequirePackage{kvoptions}
-\pagenumbering{gobble}
-\setlength{\parindent}{0cm}
 %    \end{macrocode}
-
-
+% The grffile package makes it possible to include image files
+% containing underscores, whitespaces etc.
+%    \begin{macrocode}
+\RequirePackage{grffile}
+%    \end{macrocode}
+% The |graphicx| package is more robust than the package |graphics|
+%    \begin{macrocode}
+\RequirePackage{graphicx}
+%    \end{macrocode}
+%
 % We use |PE| as abbreviation for \emph{part extraction}.
 %    \begin{macrocode}
 \SetupKeyvalOptions{
