@@ -301,9 +301,12 @@ used as an example.
 % \begin{macro}{\part@system}
 %    \begin{macrocode}
 \newcommand{\part@system}[1]{%
+  \noindent%
   \includegraphics[width=\linewidth]{{#1}}%
   \ifseparator%
+    \vfil%
     \par%
+    \noindent%
     \includegraphics{separator}%
   \else%
   \fi%
