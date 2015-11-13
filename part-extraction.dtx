@@ -178,6 +178,10 @@ For relative paths use this pattern: |./../some/path/|.
 \system
 \end{partextraction}
 
+%%
+% separator
+%%
+
 \subsection{separator}
 
 \begin{verbatim}
@@ -190,6 +194,18 @@ For relative paths use this pattern: |./../some/path/|.
 \system[3]
 \end{partextraction}
 
+%%
+% plain
+%%
+
+\subsection{plain}
+
+The option |plain| is only useful for global options. It sets the page
+margin to 1cm and turns off the page numbering.
+
+\begin{verbatim}
+\usepackage[plain]{part-extraction}
+\end{verbatim}
 
 \DocInput{part-extraction.dtx}
 \PrintChanges
@@ -257,6 +273,11 @@ used as an example.
 \RequirePackage{graphicx}
 %    \end{macrocode}
 %
+% For the option |plain| we need the package |geometry|.
+%    \begin{macrocode}
+\RequirePackage{geometry}
+%    \end{macrocode}
+%
 % \subsubsection{Options}
 %
 % We use |PE| as abbreviation for \emph{part extraction}.
@@ -266,12 +287,20 @@ used as an example.
   prefix=PE@
 }
 %    \end{macrocode}
+%
 %    \begin{macrocode}
 \newif\ifseparator
 \separatorfalse
 \DeclareVoidOption{separator}{\separatortrue}
 %    \end{macrocode}
-
+%
+%    \begin{macrocode}
+\DeclareVoidOption{plain}{%
+  \newgeometry{margin=1cm}%
+  \pagenumbering{gobble}%
+}
+%    \end{macrocode}
+%
 %    \begin{macrocode}
 \define@key{PE}{path}{\directlua{part.set_path('#1')}}
 %    \end{macrocode}
