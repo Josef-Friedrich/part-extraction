@@ -65,7 +65,7 @@
 %-----------------------------------------------------------------------
 
 \DescribeMacro{\system}
- 
+
 \begin{verbatim}
 \begin{partextraction}
 \system[2]
@@ -106,6 +106,10 @@ System No. 1\\
 
 For relative paths use this pattern: |./../some/path/|.
 
+%%
+% title
+%%
+
 \subsection{title}
 
 \begin{verbatim}
@@ -117,6 +121,10 @@ For relative paths use this pattern: |./../some/path/|.
 \begin{partextraction}[title = {A title}]
 \system
 \end{partextraction}
+
+%%
+% subtitle
+%%
 
 \subsection{subtitle}
 
@@ -130,6 +138,10 @@ For relative paths use this pattern: |./../some/path/|.
 \system
 \end{partextraction}
 
+%%
+% composer
+%%
+
 \subsection{composer}
 
 \begin{verbatim}
@@ -141,6 +153,10 @@ For relative paths use this pattern: |./../some/path/|.
 \begin{partextraction}[composer = {A composer}]
 \system
 \end{partextraction}
+
+%%
+% all meta
+%%
 
 \subsection{All meta informations}
 
@@ -160,6 +176,18 @@ For relative paths use this pattern: |./../some/path/|.
   composer = {A composer}
 ]
 \system
+\end{partextraction}
+
+\subsection{separator}
+
+\begin{verbatim}
+\begin{partextraction}[separator]
+\system[3]
+\end{partextraction}
+\end{verbatim}
+
+\begin{partextraction}[separator]
+\system[3]
 \end{partextraction}
 
 
@@ -209,26 +237,27 @@ used as an example.
 %<*package>
 % \fi
 %
-%!TEX program = lualatex
+% \subsection{part-extraction.sty}
+%
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{part-extraction}[2015/06/19 Class to extract parts from a full ensemble score.]
 \directlua{
   part = require('part-extraction')
 }
-\newif\ifseparator
-\separatorfalse
-% \DeclareOption{separator}{\separatortrue}
 %    \end{macrocode}
-% The grffile package makes it possible to include image files
+%
+% The |grffile| package makes it possible to include image files
 % containing underscores, whitespaces etc.
 %    \begin{macrocode}
 \RequirePackage{grffile}
 %    \end{macrocode}
-% The |graphicx| package is more robust than the package |graphics|
+% The |graphicx| package is more robust than the package |graphics|.
 %    \begin{macrocode}
 \RequirePackage{graphicx}
 %    \end{macrocode}
+%
+% \subsubsection{Options}
 %
 % We use |PE| as abbreviation for \emph{part extraction}.
 %    \begin{macrocode}
@@ -237,7 +266,12 @@ used as an example.
   prefix=PE@
 }
 %    \end{macrocode}
-%
+%    \begin{macrocode}
+\newif\ifseparator
+\separatorfalse
+\DeclareVoidOption{separator}{\separatortrue}
+%    \end{macrocode}
+
 %    \begin{macrocode}
 \define@key{PE}{path}{\directlua{part.set_path('#1')}}
 %    \end{macrocode}
@@ -261,6 +295,8 @@ used as an example.
 %    \begin{macrocode}
 \ProcessKeyvalOptions*
 %    \end{macrocode}
+%
+% \subsubsection{Makros}
 %
 % \begin{macro}{\part@system}
 %    \begin{macrocode}
@@ -337,10 +373,9 @@ used as an example.
   \let\system\PE@system%
   \let\countS\PE@system@count%
   \let\systemN\PE@system@by@number%
-
-  \ifx\PE@title\undefined\else \centerline{\Large{\bfseries{}\PE@title}} \fi
-  \ifx\PE@subtitle\undefined\else \centerline{\large{\PE@subtitle}} \fi
-  \ifx\PE@composer\undefined\else \par\raggedleft\textit{\PE@composer}\par \fi
+  \ifx\PE@title\undefined\else \centerline{\Large{\bfseries{}\PE@title}} \fi%
+  \ifx\PE@subtitle\undefined\else \centerline{\large{\PE@subtitle}} \fi%
+  \ifx\PE@composer\undefined\else \par\raggedleft\textit{\PE@composer}\par \fi%
 }{}
 %    \end{macrocode}
 %
@@ -350,6 +385,9 @@ used as an example.
 %</package>
 %<*lua>
 % \fi
+%
+% \subsection{part-extraction.lua}
+%
 %    \begin{macrocode}
 require('lfs')
 %    \end{macrocode}
