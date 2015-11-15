@@ -102,6 +102,24 @@ System No. 1\\
 
 \section{Options}
 
+All options can be used both in the
+|\usepackage[options]{part-extraction}| command and in the
+|\begin{partextraction}[options]| environment.
+
+However, the option handling in the |\usepackage| command has some
+limitions: If you use whitespaces around the equal sign (e. g.:
+\fbox{|title = \{|}), then all the whitespaces are removed from the
+output and you can't write commas inside the metadata options. Simply
+write your option declaration without whitespace and all will be
+good (e. g.: \fbox{|title=\{|}).
+
+\begin{verbatim}
+\usepackage[
+  title={Du konnst du zu uns, still und leise},
+  composer={Johannes Jourdan},
+]{part-extraction}
+\end{verbatim}
+
 \subsection{path}
 
 For relative paths use this pattern: |./../some/path/|.
@@ -263,12 +281,7 @@ used as an example.
 }
 %    \end{macrocode}
 %
-% We use the |kvoptions-patch| package to achieve more robust package
-% options. Without including |kvoptions-patch| no commas can be used
-% inside the metadata options like |title|, |composer| etc.. and all
-% whitespaces are removed too.
 %    \begin{macrocode}
-\RequirePackage{kvoptions-patch}
 \RequirePackage{kvoptions}
 %    \end{macrocode}
 %
