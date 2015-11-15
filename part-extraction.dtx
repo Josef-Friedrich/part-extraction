@@ -263,9 +263,19 @@ used as an example.
 }
 %    \end{macrocode}
 %
+% We use the |kvoptions-patch| package to achieve more robust package
+% options. Without including |kvoptions-patch| no commas can be used
+% inside the metadata options like |title|, |composer| etc.. and all
+% whitespaces are removed too.
+%    \begin{macrocode}
+\RequirePackage{kvoptions-patch}
+\RequirePackage{kvoptions}
+%    \end{macrocode}
+%
 % The |grffile| package makes it possible to include image files
 % containing underscores, whitespaces etc.
 %    \begin{macrocode}
+\RequirePackage{kvoptions-patch}
 \RequirePackage{grffile}
 %    \end{macrocode}
 % The |graphicx| package is more robust than the package |graphics|.
